@@ -1,37 +1,78 @@
-[*] Found dataset.csv — training with dataset URLs + improved feature extractor
-[*] Loading dataset from dataset.csv...
-[*] Dataset shape: (11430, 89)
-[*] Using URL column: 'url', Label column: 'status'
-[*] Extracting improved features from dataset URLs...
-[*] Extracted features for 11430 URLs. Skipped: 0
-[*] Class distribution — Legitimate: 5715, Phishing: 5715
+[*] Parsed 11430 URLs, skipped 0
+[*] Class balance: legit=5715 phishing=5715
 
-[*] Training regularized Random Forest on 9144 samples...
-
-[✓] Test Accuracy: 87.10%
-
-[*] Classification Report:
+[*] (A) Random stratified 80/20 split
               precision    recall  f1-score   support
 
-  Legitimate       0.86      0.89      0.87      1157
-    Phishing       0.88      0.85      0.87      1129
+  Legitimate       0.87      0.88      0.88      1143
+    Phishing       0.88      0.87      0.88      1143
 
-    accuracy                           0.87      2286
-   macro avg       0.87      0.87      0.87      2286
-weighted avg       0.87      0.87      0.87      2286
+    accuracy                           0.88      2286
+   macro avg       0.88      0.88      0.88      2286
+weighted avg       0.88      0.88      0.88      2286
 
-[✓] Model saved -> model.pkl
-[✓] Feature count saved -> feature_count.pkl (20 features)
+5-fold StratifiedKFold accuracy: 0.8742 +/- 0.0036
 
-[*] Sanity check on real-world URLs:
-  ✓ [Legitimate] Legitimate (81.9%) — https://www.google.com
-  ✓ [Legitimate] Legitimate (67.7%) — google.com
-  ✓ [Legitimate] Legitimate (74.6%) — https://github.com/login
-  ✓ [Legitimate] Legitimate (69.6%) — https://github.com
-  ✓ [Legitimate] Legitimate (82.7%) — https://apple.com/iphone
-  ✓ [Legitimate] Legitimate (65.1%) — https://youtube.com
-  ✓ [Legitimate] Legitimate (96.9%) — https://www.amazon.in/
-  ✓ [Phishing  ] Phishing   (84.6%) — http://paypa1-secure-login.xyz/update
-  ✓ [Phishing  ] Phishing   (99.3%) — http://192.168.1.1/verify-account
-  ✓ [Phishing  ] Phishing   (85.3%) — http://secure-banking-login-confirm.tk/update?id=12345
-  ✓ [Phishing  ] Phishing   (80.8%) — http://login-verify-account.xyz/secure
+[*] (B) Group-split (no shared domains between train/test) report
+              precision    recall  f1-score   support
+
+  Legitimate       0.79      0.89      0.84      1097
+    Phishing       0.90      0.82      0.86      1390
+
+    accuracy                           0.85      2487
+   macro avg       0.85      0.85      0.85      2487
+weighted avg       0.86      0.85      0.85      2487
+
+Confusion matrix [[TN FP] [FN TP]]:
+ [[ 976  121]
+ [ 254 1136]]
+ROC-AUC: 0.9164
+
+5-fold GroupKFold macro-F1: 0.8295 +/- 0.0362
+
+[*] Feature importances (impurity-based)
+  Digit Ratio in URL     0.134
+  Path Length            0.124
+  Hostname Length        0.104
+  URL Length             0.104
+  Slash Count            0.097
+  Hostname Entropy       0.077
+  Digits in Hostname     0.065
+  Dots in Hostname       0.046
+  Trusted TLD            0.044
+  Special Char Count     0.043
+  Subdomain Count        0.042
+  Keyword in Path        0.039
+  Hyphens in Hostname    0.022
+  Has HTTPS              0.022
+  Is Top Domain          0.016
+  Keyword in Hostname    0.008
+  Has @ Symbol           0.008
+  Suspicious TLD         0.004
+  Has IP Address         0.001
+  Has Custom Port        0.000
+
+[*] Drop-one-feature ablation (macro-F1 on the same split)
+  without URL Length             F1=0.8462 (delta -0.0024)
+  without Hostname Length        F1=0.8372 (delta -0.0113)
+  without Path Length            F1=0.8363 (delta -0.0123)
+  without Dots in Hostname       F1=0.8446 (delta -0.0040)
+  without Hyphens in Hostname    F1=0.8441 (delta -0.0044)
+  without Has @ Symbol           F1=0.8430 (delta -0.0056)
+  without Has HTTPS              F1=0.8481 (delta -0.0005)
+  without Subdomain Count        F1=0.8474 (delta -0.0012)
+  without Has IP Address         F1=0.8433 (delta -0.0053)
+  without Digits in Hostname     F1=0.8466 (delta -0.0020)
+  without Digit Ratio in URL     F1=0.8258 (delta -0.0228)
+  without Keyword in Hostname    F1=0.8465 (delta -0.0021)
+  without Keyword in Path        F1=0.8436 (delta -0.0050)
+  without Suspicious TLD         F1=0.8472 (delta -0.0014)
+  without Trusted TLD            F1=0.8459 (delta -0.0027)
+  without Special Char Count     F1=0.8417 (delta -0.0068)
+  without Hostname Entropy       F1=0.8490 (delta +0.0004)
+  without Slash Count            F1=0.8159 (delta -0.0327)
+  without Has Custom Port        F1=0.8469 (delta -0.0017)
+  without Is Top Domain          F1=0.8464 (delta -0.0021)
+
+Latency: 13.64 ms/URL single call, 10.5 us/URL batched
+[✓] Saved model.joblib (with version metadata)
