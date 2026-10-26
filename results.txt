@@ -1,0 +1,37 @@
+[*] Found dataset.csv — training with dataset URLs + improved feature extractor
+[*] Loading dataset from dataset.csv...
+[*] Dataset shape: (11430, 89)
+[*] Using URL column: 'url', Label column: 'status'
+[*] Extracting improved features from dataset URLs...
+[*] Extracted features for 11430 URLs. Skipped: 0
+[*] Class distribution — Legitimate: 5715, Phishing: 5715
+
+[*] Training regularized Random Forest on 9144 samples...
+
+[✓] Test Accuracy: 87.10%
+
+[*] Classification Report:
+              precision    recall  f1-score   support
+
+  Legitimate       0.86      0.89      0.87      1157
+    Phishing       0.88      0.85      0.87      1129
+
+    accuracy                           0.87      2286
+   macro avg       0.87      0.87      0.87      2286
+weighted avg       0.87      0.87      0.87      2286
+
+[✓] Model saved -> model.pkl
+[✓] Feature count saved -> feature_count.pkl (20 features)
+
+[*] Sanity check on real-world URLs:
+  ✓ [Legitimate] Legitimate (81.9%) — https://www.google.com
+  ✓ [Legitimate] Legitimate (67.7%) — google.com
+  ✓ [Legitimate] Legitimate (74.6%) — https://github.com/login
+  ✓ [Legitimate] Legitimate (69.6%) — https://github.com
+  ✓ [Legitimate] Legitimate (82.7%) — https://apple.com/iphone
+  ✓ [Legitimate] Legitimate (65.1%) — https://youtube.com
+  ✓ [Legitimate] Legitimate (96.9%) — https://www.amazon.in/
+  ✓ [Phishing  ] Phishing   (84.6%) — http://paypa1-secure-login.xyz/update
+  ✓ [Phishing  ] Phishing   (99.3%) — http://192.168.1.1/verify-account
+  ✓ [Phishing  ] Phishing   (85.3%) — http://secure-banking-login-confirm.tk/update?id=12345
+  ✓ [Phishing  ] Phishing   (80.8%) — http://login-verify-account.xyz/secure
